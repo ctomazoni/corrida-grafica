@@ -14,8 +14,8 @@ public class Frame extends JFrame{
 	
 	public Frame() {		
 		// Cria o frame.
-		super("CG-N4_Camera");   
-		setBounds(300,250,janelaLargura,janelaAltura+22);  // 400 + 22 da borda do t’tulo da janela
+		super("Corrida Gráfica");
+		setBounds(300,250,janelaLargura,janelaAltura+22);  // 400 + 22 da borda do título da janela
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout());
 

@@ -23,13 +23,14 @@ public class Main implements GLEventListener, KeyListener {
 	private double xEye, yEye, zEye;
 	private double xCenter, yCenter, zCenter;
 	private float xTr, yTr, zTr;
-	private float escalaCubo[] = { 9.0f, 9.0f, 9.0f };
+	private float tamanhoCubo = 5.0f;
+	private float escalaCubo[] = { tamanhoCubo, tamanhoCubo, tamanhoCubo };
 
     private float corRed[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-//  private float corGreen[] = { 0.0f, 1.0f, 0.0f, 1.0f };
-//  private float corBlue[] = { 0.0f, 0.0f, 1.0f, 1.0f };
-//  private float corWhite[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-//  private float corBlack[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+    private float corGreen[] = { 0.0f, 1.0f, 0.0f, 1.0f };
+    private float corBlue[] = { 0.0f, 0.0f, 1.0f, 1.0f };
+    private float corWhite[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    private float corBlack[] = { 0.0f, 0.0f, 0.0f, 1.0f };
     
     private boolean eHMaterial = true;
 
@@ -75,11 +76,60 @@ public class Main implements GLEventListener, KeyListener {
 
 		//drawAxis();
 		
-		xTr = 0.0f;
-		yTr = 0.0f;
-		zTr = 0.0f;
+		xTr = 2.0f;
+		yTr = 2.0f;
+		zTr = 2.0f;
 		
-		gl.glColor3f(1.0f, 0.0f, 0.0f);
+		drawCube(getTranslacaoCubo(),escalaCubo,corWhite);
+		zTr++;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr++;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		xTr++;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		xTr++;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		xTr++;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		xTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		xTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		xTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		xTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		xTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		xTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		xTr--;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr++;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr++;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr++;
+		drawCube(getTranslacaoCubo(),escalaCubo);
+		zTr++;
 		drawCube(getTranslacaoCubo(),escalaCubo);
 		zTr++;
 		drawCube(getTranslacaoCubo(),escalaCubo);
@@ -89,30 +139,10 @@ public class Main implements GLEventListener, KeyListener {
 		drawCube(getTranslacaoCubo(),escalaCubo);
 		xTr++;
 		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
+		xTr++;
 		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
+		xTr++;
+		drawCube(getTranslacaoCubo(),escalaCubo,corGreen);
 		
 		gl.glFlush();
 	}
@@ -123,8 +153,12 @@ public class Main implements GLEventListener, KeyListener {
 	}
 	
 	private void drawCube(float translacao[], float escala[]) {
+		drawCube(translacao,escala,corRed);
+	}
+	
+	private void drawCube(float translacao[], float escala[], float cor[]) {
 		if (eHMaterial) {
-			gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, corRed, 0);
+			gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, cor, 0);
 			gl.glEnable(GL.GL_LIGHTING);
 		}
 
