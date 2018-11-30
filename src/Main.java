@@ -15,13 +15,14 @@ import javax.media.opengl.glu.GLU;
 
 import com.sun.opengl.util.GLUT;
 
+import model.Camera;
+import model.Cubo;
+
 public class Main implements GLEventListener, KeyListener {
 	private GL gl;
 	private GLU glu;
 	private GLUT glut;
 	private GLAutoDrawable glDrawable;
-	private double xEye, yEye, zEye;
-	private double xCenter, yCenter, zCenter;
 	private float xTr, yTr, zTr;
 	private float tamanhoCubo = 5.0f;
 	private float escalaCubo[] = { tamanhoCubo, tamanhoCubo, tamanhoCubo };
@@ -33,6 +34,14 @@ public class Main implements GLEventListener, KeyListener {
     private float corBlack[] = { 0.0f, 0.0f, 0.0f, 1.0f };
     
     private boolean eHMaterial = true;
+    
+    private Camera cameraPrimeiraPessoa;
+    private Camera camera2d;
+
+    private Camera cameraAtiva;
+    
+    private Cubo cuboCarrinho;
+    
 
 	public void init(GLAutoDrawable drawable) {
 		glDrawable = drawable;
@@ -40,10 +49,22 @@ public class Main implements GLEventListener, KeyListener {
 		glu = new GLU();
 		glut = new GLUT();
 		glDrawable.setGL(new DebugGL(gl));
+		
+		cameraPrimeiraPessoa = new Camera(glu);
+		cameraPrimeiraPessoa.setxEye(40.f);
+		cameraPrimeiraPessoa.setyEye(40.f);
+		cameraPrimeiraPessoa.setzEye(40.f);
+		cameraPrimeiraPessoa.setxCenter(0.f);
+		cameraPrimeiraPessoa.setyCenter(0.f);
+		cameraPrimeiraPessoa.setzCenter(0.f);
+		
+		camera2d = new Camera(glu);
+		
+		cameraAtiva = cameraPrimeiraPessoa;
+		
+		cuboCarrinho = new Cubo(1.0f, gl, glut);
 
 		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		xEye = 40.0f; 		yEye = 40.0f; 		zEye = 40.0f;
-		xCenter = 0.0f;		yCenter = 0.0f;		zCenter = 0.0f;
 		
 		ligarLuz();
 		
@@ -72,10 +93,21 @@ public class Main implements GLEventListener, KeyListener {
 
         gl.glMatrixMode(GL.GL_MODELVIEW);
         gl.glLoadIdentity();
-		glu.gluLookAt(xEye, yEye, zEye, xCenter, yCenter, zCenter, 0.0f, 1.0f, 0.0f);
+		
+        cameraAtiva.lookAt();
+        
+        cuboCarrinho.desenhar();
 
 		//drawAxis();
 		
+		desenharPista();
+		
+		
+		
+		gl.glFlush();
+	}
+
+	private void desenharPista() {
 		xTr = 2.0f;
 		yTr = 2.0f;
 		zTr = 2.0f;
@@ -143,8 +175,6 @@ public class Main implements GLEventListener, KeyListener {
 		drawCube(getTranslacaoCubo(),escalaCubo);
 		xTr++;
 		drawCube(getTranslacaoCubo(),escalaCubo,corGreen);
-		
-		gl.glFlush();
 	}
 	
 	private float[] getTranslacaoCubo() {
@@ -190,29 +220,37 @@ public class Main implements GLEventListener, KeyListener {
 			System.exit(1);
 		break;
 		case KeyEvent.VK_1:
-			xEye = 20.0f;
-			yEye = 20.0f;
-			zEye = 20.0f;
+			cameraAtiva.setxEye(20.0f);
+			cameraAtiva.setyEye(20.0f);
+			cameraAtiva.setzEye(20.0f);
 		break;
 		case KeyEvent.VK_2:
-			xEye = 0.0f;
-			yEye = 0.0f;
-			zEye = 20.0f;
+			cameraAtiva.setxEye(0.0f);
+			cameraAtiva.setyEye(0.0f);
+			cameraAtiva.setzEye(20.0f);
 			break;
 		case KeyEvent.VK_3:
-			xEye = 0.0f;
-			yEye = 0.0f;
-			zEye = -20.0f;
+			cameraAtiva.setxEye(0.0f);
+			cameraAtiva.setyEye(0.0f);
+			cameraAtiva.setzEye(20.0f);
 			break;
 		case KeyEvent.VK_4:
-			xEye = 1.0f;
-			yEye = 0.0f;
-			zEye = 0.0f;
+			cameraAtiva.setxEye(1.0f);
+			cameraAtiva.setyEye(0.0f);
+			cameraAtiva.setzEye(0.0f);
 			break;
 
 		case KeyEvent.VK_M:
 			eHMaterial = !eHMaterial;
 			ligarLuz();
+			break;
+			
+		case KeyEvent.VK_UP:
+			cuboCarrinho.aumentarVelocidade();
+			break;
+
+		case KeyEvent.VK_DOWN:
+			cuboCarrinho.diminuirVelocidade();
 			break;
 		}
 
