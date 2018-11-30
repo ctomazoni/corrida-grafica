@@ -23,8 +23,10 @@ public class Main implements GLEventListener, KeyListener {
 	private double xEye, yEye, zEye;
 	private double xCenter, yCenter, zCenter;
 	private float xTr, yTr, zTr;
-	private float tamanhoCubo = 5.0f;
-	private float escalaCubo[] = { tamanhoCubo, tamanhoCubo, tamanhoCubo };
+	private float xVeiculo = 1.0f;
+	private float zVeiculo = 2.0f;
+	private float escalaCubo[] = { 5.0f, 5.0f, 5.0f };
+	private float escalaVeiculo[] = { 3.0f, 3.0f, 3.0f };
 
     private float corRed[] = { 1.0f, 0.0f, 0.0f, 1.0f };
     private float corGreen[] = { 0.0f, 1.0f, 0.0f, 1.0f };
@@ -76,7 +78,7 @@ public class Main implements GLEventListener, KeyListener {
 
 		//drawAxis();
 		
-		xTr = 2.0f;
+		xTr = 1.0f;
 		yTr = 2.0f;
 		zTr = 2.0f;
 		
@@ -144,12 +146,35 @@ public class Main implements GLEventListener, KeyListener {
 		xTr++;
 		drawCube(getTranslacaoCubo(),escalaCubo,corGreen);
 		
+		drawCube(getTranslacaoVeiculo(),escalaVeiculo,corBlue);
+		
 		gl.glFlush();
+	}
+	
+	private void moverVeiculoDireita() {
+		xVeiculo++;
+	}
+	
+	private void moverVeiculoEsquerda() {
+		xVeiculo--;
+	}
+	
+	private void moverVeiculoFrente() {
+		zVeiculo--;
+	}
+	
+	private void moverVeiculoRe() {
+		zVeiculo++;
 	}
 	
 	private float[] getTranslacaoCubo() {
 		float translacaoCubo[] = { xTr, yTr, zTr };
 		return translacaoCubo;
+	}
+	
+	private float[] getTranslacaoVeiculo() {
+		float translacaoVeiculo[] = { xVeiculo, 5.0f, zVeiculo };
+		return translacaoVeiculo;
 	}
 	
 	private void drawCube(float translacao[], float escala[]) {
@@ -185,38 +210,47 @@ public class Main implements GLEventListener, KeyListener {
 
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
-
-		case KeyEvent.VK_ESCAPE:
-			System.exit(1);
-		break;
-		case KeyEvent.VK_1:
-			xEye = 20.0f;
-			yEye = 20.0f;
-			zEye = 20.0f;
-		break;
-		case KeyEvent.VK_2:
-			xEye = 0.0f;
-			yEye = 0.0f;
-			zEye = 20.0f;
-			break;
-		case KeyEvent.VK_3:
-			xEye = 0.0f;
-			yEye = 0.0f;
-			zEye = -20.0f;
-			break;
-		case KeyEvent.VK_4:
-			xEye = 1.0f;
-			yEye = 0.0f;
-			zEye = 0.0f;
-			break;
-
-		case KeyEvent.VK_M:
-			eHMaterial = !eHMaterial;
-			ligarLuz();
-			break;
+			case KeyEvent.VK_ESCAPE:
+				System.exit(1);
+				break;
+			case KeyEvent.VK_1:
+				xEye = 20.0f;
+				yEye = 20.0f;
+				zEye = 20.0f;
+				break;
+			case KeyEvent.VK_2:
+				xEye = 0.0f;
+				yEye = 0.0f;
+				zEye = 20.0f;
+				break;
+			case KeyEvent.VK_3:
+				xEye = 0.0f;
+				yEye = 0.0f;
+				zEye = -20.0f;
+				break;
+			case KeyEvent.VK_4:
+				xEye = 1.0f;
+				yEye = 0.0f;
+				zEye = 0.0f;
+				break;
+			case KeyEvent.VK_M:
+				eHMaterial = !eHMaterial;
+				ligarLuz();
+				break;
+			case KeyEvent.VK_RIGHT:
+				moverVeiculoDireita();
+				break;
+			case KeyEvent.VK_LEFT:
+				moverVeiculoEsquerda();
+				break;
+			case KeyEvent.VK_UP:
+				moverVeiculoFrente();
+				break;
+			case KeyEvent.VK_DOWN:
+				moverVeiculoRe();
+				break;
 		}
-
-		glDrawable.display();	
+		glDrawable.display();
 	}
 
 	public void drawAxis() {
