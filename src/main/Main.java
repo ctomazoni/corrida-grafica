@@ -45,7 +45,7 @@ public class Main implements GLEventListener, KeyListener {
 		
 		cameraPrimeiraPessoa = new Camera(glu);
 		cameraPrimeiraPessoa.setxEye(2.f);
-		cameraPrimeiraPessoa.setyEye(20.f);
+		cameraPrimeiraPessoa.setyEye(10.f);
 		cameraPrimeiraPessoa.setzEye(4.f);
 		cameraPrimeiraPessoa.setxCenter(0.f);
 		cameraPrimeiraPessoa.setyCenter(0.f);
