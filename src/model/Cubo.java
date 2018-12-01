@@ -1,12 +1,11 @@
 package model;
 
 import javax.media.opengl.GL;
+import javax.media.opengl.glu.GLU;
 
 import com.sun.opengl.util.GLUT;
 
 public class Cubo {
-
-	private float escala;
 
 	private GL gl;
 	private GLUT glut;
@@ -17,14 +16,23 @@ public class Cubo {
 	
 	private float tempoAnterior;
 	private float posicaoAnterior;
+	private float xVeiculo = 1.0f;
+	private float zVeiculo = 2.0f;
 	
-	private float[] translacao = { 3.0f, 20.0f, 2.0f };
-
-	public Cubo(float escala, GL gl, GLUT glut) {
+	private float translacao[] = { xVeiculo, 5.0f, zVeiculo };
+	private float escalaVeiculo[] = { 3.0f, 3.0f, 3.0f };
+	private float rotacao[] = { 0.0f, 0.0f, 0.0f };
+	
+	private Camera camera;
+	
+	public Cubo(GL gl, GLU glu, GLUT glut) {
 		super();
-		this.escala = escala;
 		this.gl = gl;
 		this.glut = glut;
+		camera = new Camera(glu);
+		camera.setxCenter(0.f);
+		camera.setyCenter(0.f);
+		camera.setzCenter(0.f);
 		
 		Thread desacelaracao = new Thread(() -> {
 			while (true) {
@@ -45,8 +53,10 @@ public class Cubo {
 		gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, cor, 0);
 			gl.glEnable(GL.GL_LIGHTING);
 			gl.glPushMatrix();
-			gl.glScalef(escala, escala, escala);
-			gl.glTranslated(translacao[0], translacao[1], translacao[2]);
+			gl.glScalef(escalaVeiculo[0], escalaVeiculo[1], escalaVeiculo[2]);
+			gl.glRotatef(rotacao[0], rotacao[1], rotacao[2], 0.0f);
+			gl.glTranslated(xVeiculo, translacao[1], zVeiculo);
+			
 			glut.glutSolidCube(1.0f);
 		gl.glPopMatrix();
 	}
@@ -60,5 +70,36 @@ public class Cubo {
 			velocidade -= 0.04f;
 		
 	}
+	
+	public void moverVeiculoDireita() {
+		xVeiculo++;
+		atualizarCamera();
+	}
+	
+	public void moverVeiculoEsquerda() {
+		xVeiculo--;
+		atualizarCamera();
+	}
+	
+	public void acelerar() {
+		zVeiculo--;
+		atualizarCamera();
+	}
+	
+	public void moverVeiculoRe() {
+		zVeiculo++;
+		atualizarCamera();
+	}
 
+	public Camera getCamera() {
+		atualizarCamera();
+		return camera;
+	}
+
+	private void atualizarCamera() {
+		camera.setxEye(xVeiculo);
+		camera.setyEye(25.0f);
+		camera.setzEye(zVeiculo+10);
+	}
+	
 }

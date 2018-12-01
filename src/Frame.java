@@ -10,12 +10,12 @@ public class Frame extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private Main renderer = new Main();
 
-	private int janelaLargura  = 400, janelaAltura = 400;
+	private int janelaLargura  = 800, janelaAltura = 600;
 	
 	public Frame() {		
 		// Cria o frame.
 		super("Corrida Gráfica");
-		setBounds(300,250,janelaLargura,janelaAltura+22);  // 400 + 22 da borda do título da janela
+		setBounds(800,250,janelaLargura,janelaAltura);  // 400 + 22 da borda do título da janela
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout());
 

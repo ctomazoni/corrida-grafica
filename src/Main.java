@@ -24,8 +24,7 @@ public class Main implements GLEventListener, KeyListener {
 	private GLUT glut;
 	private GLAutoDrawable glDrawable;
 	private float xTr, yTr, zTr;
-	private float tamanhoCubo = 5.0f;
-	private float escalaCubo[] = { tamanhoCubo, tamanhoCubo, tamanhoCubo };
+	private float escalaCubo[] = { 5.0f, 5.0f, 5.0f };
 
     private float corRed[] = { 1.0f, 0.0f, 0.0f, 1.0f };
     private float corGreen[] = { 0.0f, 1.0f, 0.0f, 1.0f };
@@ -36,7 +35,6 @@ public class Main implements GLEventListener, KeyListener {
     private boolean eHMaterial = true;
     
     private Camera cameraPrimeiraPessoa;
-    private Camera camera2d;
 
     private Camera cameraAtiva;
     
@@ -58,13 +56,11 @@ public class Main implements GLEventListener, KeyListener {
 		cameraPrimeiraPessoa.setyCenter(0.f);
 		cameraPrimeiraPessoa.setzCenter(0.f);
 		
-		camera2d = new Camera(glu);
-		
 		cameraAtiva = cameraPrimeiraPessoa;
 		
-		cuboCarrinho = new Cubo(1.0f, gl, glut);
+		cuboCarrinho = new Cubo(gl, glu, glut);
 
-		gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		
 		ligarLuz();
 		
@@ -98,17 +94,13 @@ public class Main implements GLEventListener, KeyListener {
         
         cuboCarrinho.desenhar();
 
-		//drawAxis();
-		
 		desenharPista();
-		
-		
 		
 		gl.glFlush();
 	}
 
 	private void desenharPista() {
-		xTr = 2.0f;
+		xTr = 1.0f;
 		yTr = 2.0f;
 		zTr = 2.0f;
 		
@@ -216,9 +208,9 @@ public class Main implements GLEventListener, KeyListener {
 	public void keyPressed(KeyEvent e) {
 		switch (e.getKeyCode()) {
 
-		case KeyEvent.VK_ESCAPE:
-			System.exit(1);
-		break;
+		case KeyEvent.VK_W:
+			cameraAtiva.setxEye(cameraAtiva.getxEye()-1);
+			break;
 		case KeyEvent.VK_1:
 			cameraAtiva.setxEye(20.0f);
 			cameraAtiva.setyEye(20.0f);
@@ -239,22 +231,32 @@ public class Main implements GLEventListener, KeyListener {
 			cameraAtiva.setyEye(0.0f);
 			cameraAtiva.setzEye(0.0f);
 			break;
+		case KeyEvent.VK_5:
+			cameraAtiva = cuboCarrinho.getCamera();
+			break;
 
 		case KeyEvent.VK_M:
 			eHMaterial = !eHMaterial;
 			ligarLuz();
 			break;
 			
-		case KeyEvent.VK_UP:
-			cuboCarrinho.aumentarVelocidade();
+		case KeyEvent.VK_ESCAPE:
+			System.exit(1);
 			break;
-
+		case KeyEvent.VK_RIGHT:
+			cuboCarrinho.moverVeiculoDireita();
+			break;
+		case KeyEvent.VK_LEFT:
+			cuboCarrinho.moverVeiculoEsquerda();
+			break;
+		case KeyEvent.VK_UP:
+			cuboCarrinho.acelerar();
+			break;
 		case KeyEvent.VK_DOWN:
-			cuboCarrinho.diminuirVelocidade();
+			cuboCarrinho.moverVeiculoRe();
 			break;
 		}
-
-		glDrawable.display();	
+		glDrawable.display();
 	}
 
 	public void drawAxis() {
