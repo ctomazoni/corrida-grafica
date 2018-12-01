@@ -23,21 +23,11 @@ public class Main implements GLEventListener, KeyListener {
 	private GLU glu;
 	private GLUT glut;
 	private GLAutoDrawable glDrawable;
-	private float xTr, yTr, zTr;
-	private float escalaCubo[] = { 5.0f, 5.0f, 5.0f };
-
-    private float corRed[] = { 1.0f, 0.0f, 0.0f, 1.0f };
-    private float corGreen[] = { 0.0f, 1.0f, 0.0f, 1.0f };
-    private float corBlue[] = { 0.0f, 0.0f, 1.0f, 1.0f };
-    private float corWhite[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    private float corBlack[] = { 0.0f, 0.0f, 0.0f, 1.0f };
     
     private boolean eHMaterial = true;
     
     private Camera cameraPrimeiraPessoa;
-
     private Camera cameraAtiva;
-    
     private Cubo cuboCarrinho;
     
 
@@ -45,8 +35,9 @@ public class Main implements GLEventListener, KeyListener {
 		glDrawable = drawable;
 		gl = drawable.getGL();
 		glu = new GLU();
-		glut = new GLUT();
 		glDrawable.setGL(new DebugGL(gl));
+
+		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		
 		cameraPrimeiraPessoa = new Camera(glu);
 		cameraPrimeiraPessoa.setxEye(40.f);
@@ -60,7 +51,6 @@ public class Main implements GLEventListener, KeyListener {
 		
 		cuboCarrinho = new Cubo(gl, glu, glut);
 
-		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		
 		ligarLuz();
 		
@@ -69,6 +59,81 @@ public class Main implements GLEventListener, KeyListener {
 		
 	    gl.glEnable(GL.GL_DEPTH_TEST);
 //	    gl.glDisable(GL.GL_DEPTH_TEST);
+	}
+	
+	public void display(GLAutoDrawable arg0) {
+		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+
+        gl.glMatrixMode(GL.GL_MODELVIEW);
+        gl.glLoadIdentity();
+		cameraAtiva.lookAt();
+		
+		gl.glLineWidth(1.0f);
+		gl.glPointSize(1.0f);
+
+		desenhaSRU3D();
+		//TODO: fazer um mapa 2D do cenario
+//	    gl.glMatrixMode(GL.GL_PROJECTION);
+//	    gl.glLoadIdentity();
+//		glu.gluOrtho2D(0, 400, 0, 400);
+//		gl.glColor3b((byte)0, (byte)255, (byte)255);
+//		gl.glBegin(GL.GL_QUADS);
+//			gl.glVertex2d(20, 20);
+//			gl.glVertex2d(20, 100);
+//			gl.glVertex2d(100, 100);
+//			gl.glVertex2d(100, 20);
+//		gl.glEnd();
+//        gl.glMatrixMode(GL.GL_MODELVIEW);
+//        gl.glLoadIdentity();
+        
+		gl.glFlush();
+	}
+
+	public void keyPressed(KeyEvent e) {
+
+		switch (e.getKeyCode()) {
+			case KeyEvent.VK_ESCAPE:
+				System.exit(0);
+			break;
+			case KeyEvent.VK_D:
+//				objetos[0].debug();
+			break;
+			case KeyEvent.VK_R:
+//				objetos[0].atribuirIdentidade();
+			break;
+			case KeyEvent.VK_SPACE:
+				//TODO: ERRO ao reinicar a thread
+//				manual = !manual;
+//				if (manual) animacao.stop();
+//				else animacao.start();
+			break;
+			case KeyEvent.VK_RIGHT:
+//				objetos[0].ViraEsquerda();
+			break;
+			case KeyEvent.VK_LEFT:
+//				objetos[0].ViraDireita();
+			break;
+			case KeyEvent.VK_UP:
+//				objetos[0].Acelera();
+			break;
+			case KeyEvent.VK_DOWN:
+//				objetos[0].Freia();
+			break;
+//			case KeyEvent.VK_1:
+//				xEye = 0.0f; 		yEye = 40.0f; 		zEye = 0.0f;
+//				xUp = 0.0f;		yUp = 0.0f;		zUp = -1.0f;
+//			break;
+//			case KeyEvent.VK_2:
+//				xEye = 30.0f; 		yEye = 20.0f; 		zEye = 20.0f;
+//				xUp = 0.0f;		yUp = 1.0f;		zUp = 0.0f;
+//			break;
+//			case KeyEvent.VK_3:
+//				xEye = 0.0f; 		yEye = 200.0f; 		zEye = 00.0f;
+//				xUp = 0.0f;		yUp = 0.0f;		zUp = -1.0f;
+//			break;s
+		}
+
+		glDrawable.display();
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -84,115 +149,22 @@ public class Main implements GLEventListener, KeyListener {
 //		Debug();
 	}
 
-	public void display(GLAutoDrawable drawable) {
-		gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-
-        gl.glMatrixMode(GL.GL_MODELVIEW);
-        gl.glLoadIdentity();
-		
-        cameraAtiva.lookAt();
-        
-        cuboCarrinho.desenhar();
-
-		desenharPista();
-		
-		gl.glFlush();
-	}
-
-	private void desenharPista() {
-		xTr = 1.0f;
-		yTr = 2.0f;
-		zTr = 2.0f;
-		
-		drawCube(getTranslacaoCubo(),escalaCubo,corWhite);
-		zTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr--;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		zTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo);
-		xTr++;
-		drawCube(getTranslacaoCubo(),escalaCubo,corGreen);
-	}
-	
-	private float[] getTranslacaoCubo() {
-		float translacaoCubo[] = { xTr, yTr, zTr };
-		return translacaoCubo;
-	}
-	
-	private void drawCube(float translacao[], float escala[]) {
-		drawCube(translacao,escala,corRed);
-	}
-	
-	private void drawCube(float translacao[], float escala[], float cor[]) {
-		if (eHMaterial) {
-			gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, cor, 0);
-			gl.glEnable(GL.GL_LIGHTING);
-		}
-
-		gl.glPushMatrix();
-			gl.glScalef(escala[0],escala[1],escala[2]);
-			gl.glTranslated(translacao[0], translacao[1], translacao[2]);
-			glut.glutSolidCube(1.0f);
-		gl.glPopMatrix();
-		
-		if (eHMaterial) {
-			gl.glDisable(GL.GL_LIGHTING);
-		}
+	public void desenhaSRU3D() {
+		gl.glColor3f(1.0f, 0.0f, 0.0f);
+		gl.glBegin(GL.GL_LINES);
+			gl.glVertex3f( 0.0f, 0.0f, 0.0f);
+			gl.glVertex3f(20.0f, 0.0f, 0.0f);
+		gl.glEnd();
+		gl.glColor3f(0.0f, 1.0f, 0.0f);
+		gl.glBegin(GL.GL_LINES);
+			gl.glVertex3f(0.0f,  0.0f, 0.0f);
+			gl.glVertex3f(0.0f, 20.0f, 0.0f);
+		gl.glEnd();
+		gl.glColor3f(0.0f, 0.0f, 1.0f);
+		gl.glBegin(GL.GL_LINES);
+			gl.glVertex3f(0.0f, 0.0f,  0.0f);
+			gl.glVertex3f(0.0f, 0.0f, 20.0f);
+		gl.glEnd();
 	}
 
 	private void ligarLuz() {
@@ -203,81 +175,6 @@ public class Main implements GLEventListener, KeyListener {
 		}
 		else
 			gl.glDisable(GL.GL_LIGHT0);
-	}
-
-	public void keyPressed(KeyEvent e) {
-		switch (e.getKeyCode()) {
-
-		case KeyEvent.VK_W:
-			cameraAtiva.setxEye(cameraAtiva.getxEye()-1);
-			break;
-		case KeyEvent.VK_1:
-			cameraAtiva.setxEye(20.0f);
-			cameraAtiva.setyEye(20.0f);
-			cameraAtiva.setzEye(20.0f);
-		break;
-		case KeyEvent.VK_2:
-			cameraAtiva.setxEye(0.0f);
-			cameraAtiva.setyEye(0.0f);
-			cameraAtiva.setzEye(20.0f);
-			break;
-		case KeyEvent.VK_3:
-			cameraAtiva.setxEye(0.0f);
-			cameraAtiva.setyEye(0.0f);
-			cameraAtiva.setzEye(20.0f);
-			break;
-		case KeyEvent.VK_4:
-			cameraAtiva.setxEye(1.0f);
-			cameraAtiva.setyEye(0.0f);
-			cameraAtiva.setzEye(0.0f);
-			break;
-		case KeyEvent.VK_5:
-			cameraAtiva = cuboCarrinho.getCamera();
-			break;
-
-		case KeyEvent.VK_M:
-			eHMaterial = !eHMaterial;
-			ligarLuz();
-			break;
-			
-		case KeyEvent.VK_ESCAPE:
-			System.exit(1);
-			break;
-		case KeyEvent.VK_RIGHT:
-			cuboCarrinho.moverVeiculoDireita();
-			break;
-		case KeyEvent.VK_LEFT:
-			cuboCarrinho.moverVeiculoEsquerda();
-			break;
-		case KeyEvent.VK_UP:
-			cuboCarrinho.acelerar();
-			break;
-		case KeyEvent.VK_DOWN:
-			cuboCarrinho.moverVeiculoRe();
-			break;
-		}
-		glDrawable.display();
-	}
-
-	public void drawAxis() {
-		// eixo X - Red
-		gl.glColor3f(1.0f, 0.0f, 0.0f);
-		gl.glBegin(GL.GL_LINES);
-			gl.glVertex3f(0.0f, 0.0f, 0.0f);
-			gl.glVertex3f(10.0f, 0.0f, 0.0f);
-		gl.glEnd();
-		// eixo Y - Green
-		gl.glColor3f(0.0f, 1.0f, 0.0f);
-		gl.glBegin(GL.GL_LINES);
-			gl.glVertex3f(0.0f, 0.0f, 0.0f);
-			gl.glVertex3f(0.0f, 10.0f, 0.0f);
-		gl.glEnd();
-		// eixo Z - Blue
-		gl.glColor3f(0.0f, 0.0f, 1.0f);
-		gl.glBegin(GL.GL_LINES);
-			gl.glVertex3f(0.0f, 0.0f, 0.0f);
-			gl.glVertex3f(0.0f, 0.0f, 10.0f);
-		gl.glEnd();
 	}
 
 	public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {
@@ -291,9 +188,6 @@ public class Main implements GLEventListener, KeyListener {
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 
-	}
-
-	public void Debug() {
 	}
 
 }

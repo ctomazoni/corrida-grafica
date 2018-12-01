@@ -197,5 +197,18 @@ public final class BoundingBox {
 		return isPonto2DDentro(new Point4D(x, y, 0.0, 1.0));
 	}
 
+	public boolean isPonto3DDentro(Point4D ponto) {
+		return obterMenorX() <= ponto.GetX() && //
+				obterMaiorX() >= ponto.GetX() && //
+				obterMenorY() <= ponto.GetY() && //
+				obterMaiorY() >= ponto.GetY() && //
+				obterMenorZ() <= ponto.GetZ() && //
+				obterMaiorZ() >= ponto.GetZ();
+	}
+	
+	public boolean isPonto3DDentro(double x, double y, double z) {
+		return isPonto3DDentro(new Point4D(x, y, z, 1.0));
+	}
+
 }
 

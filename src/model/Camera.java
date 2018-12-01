@@ -6,8 +6,6 @@ public class Camera {
 
 	private float xEye, yEye, zEye, xCenter, yCenter, zCenter;
 
-	// private float quantidadeAumentar = 10;
-
 	private GLU glu;
 
 	public Camera(GLU glu) {
