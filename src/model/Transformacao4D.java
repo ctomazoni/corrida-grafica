@@ -33,6 +33,10 @@ public final class Transformacao4D {
 
 	public Transformacao4D() {
 	}
+	
+	public double[] obterDados() {
+		return matriz;	
+	}
 
 	/**
 	 * Atribui os valores de uma matriz Identidade a matriz de Transformacao.

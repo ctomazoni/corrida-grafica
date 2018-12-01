@@ -17,6 +17,7 @@ import javax.media.opengl.glu.GLU;
 import com.sun.opengl.util.GLUT;
 
 import model.Camera;
+import model.Carro;
 import model.Cubo;
 import objmodel.object.OBJModel;
 
@@ -30,6 +31,8 @@ public class Main implements GLEventListener, KeyListener {
     
     private Camera cameraPrimeiraPessoa;
     private Camera cameraAtiva;
+    
+    private Carro carroModel;
 
 	public void init(GLAutoDrawable drawable) {
 		glDrawable = drawable;
@@ -49,6 +52,8 @@ public class Main implements GLEventListener, KeyListener {
 		cameraPrimeiraPessoa.setzCenter(0.f);
 		
 		cameraAtiva = cameraPrimeiraPessoa;
+		
+		 carroModel = new Carro(gl);
 		
 		ligarLuz();
 		
@@ -70,8 +75,6 @@ public class Main implements GLEventListener, KeyListener {
 		float[] white = {1.0f,1.0f,1.0f,1.0f};
 		gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, white, 0);
 		gl.glEnable(GL.GL_LIGHTING);
-		
-		OBJModel carroModel = new OBJModel("data/porsche", 1.5f, gl, true);
 		
 		carroModel.draw(gl);
 		
@@ -99,17 +102,17 @@ public class Main implements GLEventListener, KeyListener {
 //				else animacao.start();
 			break;
 			case KeyEvent.VK_RIGHT:
-//				objetos[0].ViraEsquerda();
-			break;
+				carroModel.virarDireita();
+				break;
 			case KeyEvent.VK_LEFT:
-//				objetos[0].ViraDireita();
-			break;
+				carroModel.virarEsquerda();
+				break;
 			case KeyEvent.VK_UP:
-//				objetos[0].Acelera();
-			break;
+				carroModel.acelerar();
+				break;
 			case KeyEvent.VK_DOWN:
-//				objetos[0].Freia();
-			break;
+				carroModel.freiar();
+				break;
 //			case KeyEvent.VK_1:
 //				xEye = 0.0f; 		yEye = 40.0f; 		zEye = 0.0f;
 //				xUp = 0.0f;		yUp = 0.0f;		zUp = -1.0f;
