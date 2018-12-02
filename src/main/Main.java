@@ -19,6 +19,7 @@ import com.sun.opengl.util.GLUT;
 import model.Camera;
 import model.Carro;
 import model.Cubo;
+import model.Volante;
 import objmodel.object.OBJModel;
 
 public class Main implements GLEventListener, KeyListener {
@@ -33,6 +34,7 @@ public class Main implements GLEventListener, KeyListener {
     private Camera cameraAtiva;
     
     private Carro carroModel;
+    private Volante volanteModel;
 
 	public void init(GLAutoDrawable drawable) {
 		glDrawable = drawable;
@@ -53,7 +55,8 @@ public class Main implements GLEventListener, KeyListener {
 		
 		cameraAtiva = cameraPrimeiraPessoa;
 		
-		 carroModel = new Carro(gl);
+		carroModel = new Carro(gl);
+		volanteModel = new Volante(gl);
 		
 		ligarLuz();
 		
@@ -77,6 +80,7 @@ public class Main implements GLEventListener, KeyListener {
 		gl.glEnable(GL.GL_LIGHTING);
 		
 		carroModel.draw(gl);
+		volanteModel.draw(gl);
 		
 		gl.glDisable(GL.GL_LIGHTING);
 		
