@@ -8,11 +8,13 @@ public class Carro {
 
 	private OBJModel model;
 	private Transformacao4D matrizObjeto = new Transformacao4D();
-	private double deslocamento = 0.1;
-	private double angulo;
+	private float deslocamento = 0.1f;
+	private float angulo;
 
 	public Carro(GL gl) {
-		model = new OBJModel("data/porsche", 1.5f, gl, true);
+		model = new OBJModel("data/porsche", 2.0f, gl, true);
+		translacaoXYZ(0, 2, 0);
+		
 	}
 
 	public void draw(GL gl) {
@@ -23,14 +25,14 @@ public class Carro {
 	}
 
 	public void virarEsquerda() {
-		if (angulo <= 15) {
+		if (angulo <= 8) {
 			angulo += 0.2;
 			System.out.println(angulo);
 		}
 	}
 
 	public void virarDireita() {
-		if (angulo >= -15) {
+		if (angulo >= -8) {
 			angulo -= 0.2;
 			System.out.println(angulo);
 		}
@@ -47,7 +49,7 @@ public class Carro {
 	}
 
 	public void atribuirIdentidade() {
-		angulo = 0.0;
+		angulo = 0.0f;
 		matrizObjeto.atribuirIdentidade();
 	}
 
