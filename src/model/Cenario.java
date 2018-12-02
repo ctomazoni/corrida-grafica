@@ -10,7 +10,7 @@ public class Cenario {
 	private Transformacao4D matrizObjeto = new Transformacao4D();
 	
 	public Cenario(GL gl) {
-		model = new OBJModel("data/scene", 25, gl, true);
+		model = new OBJModel("data/cenario", 25, gl, true);
 		rotacaoY(90);
 	}
 	
