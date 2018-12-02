@@ -1,16 +1,75 @@
-# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
-# File Created: 24.02.2012 14:28:41
+# Blender MTL File: 'None'
+# Material Count: 8
 
-newmtl steering_column_body
-	Ns 8.0000
-	Ni 1.5000
-	d 1.0000
-	Tr 0.0000
-	Tf 1.0000 1.0000 1.0000 
-	illum 2
-	Ka 1.0000 1.0000 1.0000
-	Kd 1.0000 1.0000 1.0000
-	Ks 0.0540 0.0540 0.0540
-	Ke 0.0000 0.0000 0.0000
-	map_Ka Steering_Column_body.jpg
-	map_Kd Steering_Column_body.jpg
+newmtl Black_Leather
+Ns 200.000000
+Ka 0.411765 0.411765 0.411765
+Kd 0.075294 0.075294 0.075294
+Ks 0.411765 0.411765 0.411765
+Ni 1.000000
+d 1.000000
+illum 3
+map_Bump C:\\Users\\MARK~1.BAK\\AppData\\Local\\Temp\\McNeel\\RDK\\Texture Cache\\rdk$0080-0080-AADD5822.png
+
+newmtl Black_Leather_2
+Ns 200.000000
+Ka 0.411765 0.411765 0.411765
+Kd 0.075294 0.075294 0.075294
+Ks 0.411765 0.411765 0.411765
+Ni 1.000000
+d 1.000000
+illum 3
+map_Bump C:\\Users\\MARK~1.BAK\\AppData\\Local\\Temp\\McNeel\\RDK\\Texture Cache\\rdk$0080-0080-AADD5822.png
+
+newmtl Black_Plastic
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.078431 0.078431 0.078431
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 3
+
+newmtl Metal
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.407843 0.407843 0.407843
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 3
+
+newmtl None
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+
+newmtl Red_Stitch
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.492549 0.000000 0.000000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 3
+
+newmtl White
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 3
+
+newmtl Yellow
+Ns 200.000000
+Ka 1.000000 1.000000 1.000000
+Kd 0.800000 0.800000 0.000000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 3

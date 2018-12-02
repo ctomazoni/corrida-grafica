@@ -10,7 +10,8 @@ public class Cenario {
 	private Transformacao4D matrizObjeto = new Transformacao4D();
 	
 	public Cenario(GL gl) {
-		model = new OBJModel("data/scene", 1.5f, gl, true);
+		model = new OBJModel("data/scene", 25, gl, true);
+		rotacaoY(90);
 	}
 	
 	public void draw(GL gl) {
@@ -19,5 +20,12 @@ public class Cenario {
 		model.draw(gl);
 		gl.glPopMatrix();
 	}
+	
+	public void rotacaoY(double angulo) {
+		Transformacao4D rotacaoY = new Transformacao4D();
+		rotacaoY.atribuirRotacaoX(Transformacao4D.DEG_TO_RAD * angulo);
+		matrizObjeto = matrizObjeto.transformMatrix(rotacaoY);
+	}
+
 	
 }

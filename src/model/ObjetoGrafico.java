@@ -9,7 +9,7 @@ import javax.media.opengl.GL;
 
 public class ObjetoGrafico {
 
-	private LinkedList<Point4D> pontos = new LinkedList<>();
+	protected LinkedList<Point4D> pontos = new LinkedList<>();
 	private int primitiva = GL.GL_LINE_STRIP;
 	private Cor cor = new Cor();
 	private BoundingBox boundingBox;
@@ -180,9 +180,9 @@ public class ObjetoGrafico {
 	 * @param x posição x para translação.
 	 * @param y posição y para translação.
 	 */
-	public void transladar(double x, double y) {
+	public void transladar(double x, double y, double z) {
 		Transformacao4D matrizTranslate = new Transformacao4D();
-		matrizTranslate.atribuirTranslacao(x, y, 0.0d);
+		matrizTranslate.atribuirTranslacao(x, y, z);
 		transformacao4D = matrizTranslate.transformMatrix(transformacao4D);
 	}
 

@@ -280,4 +280,8 @@ public class OBJModel {
         }
         faceMats.showUsedMaterials(); // show what materials have been used by faces
     } // end of reportOnModel()
+    
+    public ModelDimensions getModelDims() {
+		return modelDims;
+	}
 }
