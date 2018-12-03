@@ -110,4 +110,29 @@ public class ModelDimensions {
         System.out.println("z Coords: " + df.format(nearPt) + " to " + df.format(farPt));
         System.out.println("  Mid: " + df.format(center.getZ()) + "; Depth: " + df.format(getDepth()));
     } // end of reportDimensions()
+
+	public float getLeftPt() {
+		return leftPt;
+	}
+
+	public float getRightPt() {
+		return rightPt;
+	}
+
+	public float getTopPt() {
+		return topPt;
+	}
+
+	public float getBottomPt() {
+		return bottomPt;
+	}
+
+	public float getFarPt() {
+		return farPt;
+	}
+
+	public float getNearPt() {
+		return nearPt;
+	}
+
 } // end of inner class ModelDimensions

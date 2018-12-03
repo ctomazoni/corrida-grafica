@@ -6,17 +6,24 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.media.opengl.DebugGL;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
 //import javax.media.opengl.glu.GLUquadric;
+import javax.swing.JOptionPane;
 
 import com.sun.opengl.util.GLUT;
+import com.sun.opengl.util.texture.TextureData;
 
 import model.Camera;
 import model.Carro;
@@ -39,17 +46,17 @@ public class Main implements GLEventListener, KeyListener {
 	private List<Carro> carrosEstacionados;
 	private Volante volanteModel;
 
-	private int texture;
-
 	public void init(GLAutoDrawable drawable) {
 		glDrawable = drawable;
 		gl = drawable.getGL();
 		glu = new GLU();
 		glut = new GLUT();
 		glDrawable.setGL(new DebugGL(gl));
-
+		
 		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-
+		
+//		gl.glEnable(GL.GL_COLOR_MATERIAL);
+		
 		cameraPrimeiraPessoa = new Camera(glu);
 		cameraPrimeiraPessoa.setxEye(1.f);
 		cameraPrimeiraPessoa.setyEye(30.f);
@@ -69,12 +76,10 @@ public class Main implements GLEventListener, KeyListener {
 		ligarLuz();
 
 		gl.glEnable(GL.GL_CULL_FACE);
-		// gl.glDisable(GL.GL_CULL_FACE);
 
 		gl.glEnable(GL.GL_DEPTH_TEST);
-		// gl.glDisable(GL.GL_DEPTH_TEST);
 	}
-
+	
 	private void criarCarrosEstacionados() {
 		carrosEstacionados = new ArrayList<>();
 		
@@ -176,8 +181,18 @@ public class Main implements GLEventListener, KeyListener {
 			carroModel.freiar();
 			break;
 		}
+		
+		verificarColisao();
 
 		glDrawable.display();
+	}
+
+	private void verificarColisao() {
+		carrosEstacionados.forEach(carro -> {
+			if (carroModel.bateuNoCarro(carro)) {
+				System.out.println("bateu");
+			}
+		});
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -221,7 +236,7 @@ public class Main implements GLEventListener, KeyListener {
 		} else
 			gl.glDisable(GL.GL_LIGHT0);
 	}
-
+	
 	public void displayChanged(GLAutoDrawable arg0, boolean arg1, boolean arg2) {
 	}
 

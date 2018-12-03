@@ -19,6 +19,8 @@ import javax.media.opengl.*;
 import com.sun.opengl.util.*;
 import com.sun.opengl.util.texture.*;
 
+import model.BoundingBox;
+
 
 public class OBJModel {
 
@@ -36,6 +38,15 @@ public class OBJModel {
     private String modelNm; // without path or ".OBJ" extension
     private float maxSize; // for scaling the model
     private int modelDispList; // the model's display list
+    
+    private float minx;
+    private float maxx;
+    private float miny;
+    private float maxy;
+    private float minz;
+    private float maxz;
+    
+    private BoundingBox boundingBox;
 
     public OBJModel(String nm, float sz, GL gl, boolean showDetails) {
         modelNm = nm;
@@ -232,6 +243,7 @@ public class OBJModel {
         float x;
         float y;
         float z;
+        
         for (int i = 0; i < verts.size(); i++) {
             vert = verts.get(i);
             x = (vert.getX() - center.getX()) * scaleFactor;
@@ -240,6 +252,12 @@ public class OBJModel {
             vert.setY(y);
             z = (vert.getZ() - center.getZ()) * scaleFactor;
             vert.setZ(z);
+            
+            if (i == 0) {
+            	boundingBox = new BoundingBox(x, y, z, x, y, z);
+            } else {
+            	boundingBox.atualizarBBox(x, y, z);
+            }
         }
     } // end of centerScale()
 
@@ -281,7 +299,8 @@ public class OBJModel {
         faceMats.showUsedMaterials(); // show what materials have been used by faces
     } // end of reportOnModel()
     
-    public ModelDimensions getModelDims() {
-		return modelDims;
+    public BoundingBox getBoundingBox() {
+		return boundingBox;
 	}
+    
 }
