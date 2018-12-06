@@ -50,8 +50,8 @@ public class Cenario {
 	
 	public void desenhaCubo(GL gl) {
 		gl.glPushMatrix();
-		gl.glTranslatef(0.0f, -1.0f, 0.0f);
-		gl.glScalef(7.0f, 0.0f, 7.0f);
+		gl.glTranslatef(10.0f, 0.0f, 7.0f);
+		gl.glScalef(10.0f, 0.0f, 7.0f);
 		gl.glColor3f(1.0f, 1.0f, 1.0f);
 		gl.glBegin (GL.GL_QUADS );
 			// Especifica a coordenada de textura para cada vertice

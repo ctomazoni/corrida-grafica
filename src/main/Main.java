@@ -6,25 +6,18 @@ package main;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.media.opengl.DebugGL;
 import javax.media.opengl.GL;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import javax.media.opengl.glu.GLU;
-//import javax.media.opengl.glu.GLUquadric;
-import javax.swing.JOptionPane;
 
 import com.sun.opengl.util.GLUT;
-import com.sun.opengl.util.texture.TextureData;
 
+import model.BoundingBox;
 import model.Camera;
 import model.Carro;
 import model.Cenario;
@@ -38,14 +31,22 @@ public class Main implements GLEventListener, KeyListener {
 
 	private boolean eHMaterial = true;
 
-	private Camera cameraPrimeiraPessoa;
+	private Camera cameraTerceiraPessoa;
 	private Camera cameraAtiva;
 
 	private Cenario cenarioModel;
 	private Carro carroModel;
 	private List<Carro> carrosEstacionados;
 	private Volante volanteModel;
+	
+	private BoundingBox bbEstacionamento1;
+	private BoundingBox bbEstacionamento2;
+	private BoundingBox bbEstacionamento3;
 
+	private boolean isDesenharBatido;
+	private boolean isDesenharOk;
+	private boolean isDesenhandoColisao = false;
+	
 	public void init(GLAutoDrawable drawable) {
 		glDrawable = drawable;
 		gl = drawable.getGL();
@@ -57,19 +58,23 @@ public class Main implements GLEventListener, KeyListener {
 		
 //		gl.glEnable(GL.GL_COLOR_MATERIAL);
 		
-		cameraPrimeiraPessoa = new Camera(glu);
-		cameraPrimeiraPessoa.setxEye(1.f);
-		cameraPrimeiraPessoa.setyEye(30.f);
-		cameraPrimeiraPessoa.setzEye(1.f);
-		cameraPrimeiraPessoa.setxCenter(0.f);
-		cameraPrimeiraPessoa.setyCenter(0.f);
-		cameraPrimeiraPessoa.setzCenter(0.f);
+		cameraTerceiraPessoa = new Camera(glu);
+		cameraTerceiraPessoa.setxEye(15.f);
+		cameraTerceiraPessoa.setyEye(20.f);
+		cameraTerceiraPessoa.setzEye(18.f);
+		cameraTerceiraPessoa.setxCenter(11.f);
+		cameraTerceiraPessoa.setyCenter(1.f);
+		cameraTerceiraPessoa.setzCenter(11.f);
 
-		cameraAtiva = cameraPrimeiraPessoa;
+		cameraAtiva = cameraTerceiraPessoa;
 
 		volanteModel = new Volante(gl);
 		cenarioModel = new Cenario(gl);
-		carroModel = new Carro(gl);
+		carroModel = new Carro(glu, gl, true);
+		
+		bbEstacionamento1 = new BoundingBox(5, 0, 8, 6, 1, 10);
+		bbEstacionamento2 = new BoundingBox(12.5, 0, 10, 14, 1, 12);
+		bbEstacionamento3 = new BoundingBox(16.0, 0, 4.2, 17.5, 1, 6.5);
 		
 		criarCarrosEstacionados();
 
@@ -83,44 +88,33 @@ public class Main implements GLEventListener, KeyListener {
 	private void criarCarrosEstacionados() {
 		carrosEstacionados = new ArrayList<>();
 		
-		Carro carro1 = new Carro(gl);
-		Carro carro2 = new Carro(gl);
-		Carro carro3 = new Carro(gl);
-		Carro carro4 = new Carro(gl);
-		Carro carro5 = new Carro(gl);
-		Carro carro6 = new Carro(gl);
+		Carro carro1 = new Carro(glu,gl);
+		Carro carro2 = new Carro(glu,gl);
+		Carro carro3 = new Carro(glu,gl);
+		Carro carro4 = new Carro(glu,gl);
+		Carro carro5 = new Carro(glu,gl);
 
-		carroModel.translacaoXYZ(-10, 0, 7);
+		carroModel.translacaoXYZ(1, 0, 3.7);
 		carroModel.rotacaoY(90);
 		
-		// do lado do inicio
-		carro1.translacaoXYZ(-10, 0, 5);
-		carro1.rotacaoY(90);
+		carro1.translacaoXYZ(5.6, 0, 7);
 
-		// primeiro da rua lado direito
-		carro2.translacaoXYZ(-1, 0, 7);
-		carro2.rotacaoY(180);
+		carro2.translacaoXYZ(5.6, 0, 11.3);
 
-		// segundo da rua lado direito
-		carro3.translacaoXYZ(-1, 0, 4.5);
+		carro3.translacaoXYZ(10.4, 0, 4.2);
 		carro3.rotacaoY(180);
 		
-		// terceiro da rua lado esquerdo
-		carro4.translacaoXYZ(-6, 0, -0.5);
-
-		// quarto da rua lado esquerdo
-		carro5.translacaoXYZ(-6, 0, -6.5);
-
-		// quinto da rua lado direito
-		carro6.translacaoXYZ(-1, 0, -6.5);
-		carro6.rotacaoY(180);
+		carro4.translacaoXYZ(10.3, 0, 10.9);
+		carro4.rotacaoY(180);
 		
+		carro5.translacaoXYZ(10.3, 0, 12.9);
+		carro5.rotacaoY(180);
+
 		carrosEstacionados.add(carro1);
 		carrosEstacionados.add(carro2);
 		carrosEstacionados.add(carro3);
 		carrosEstacionados.add(carro4);
 		carrosEstacionados.add(carro5);
-		carrosEstacionados.add(carro6);
 		
 	}
 
@@ -135,18 +129,149 @@ public class Main implements GLEventListener, KeyListener {
 		float[] white = { 1.0f, 1.0f, 1.0f, 1.0f };
 		gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, white, 0);
 		gl.glEnable(GL.GL_LIGHTING);
-
+		
 		cenarioModel.draw(gl);
 		carroModel.draw(gl);
 		volanteModel.draw(gl);
 		
 		carrosEstacionados.forEach(f -> f.draw(gl));
 		
-		gl.glDisable(GL.GL_LIGHTING);
+		bbEstacionamento1.desenharOpenGLBBox(gl);
+		bbEstacionamento2.desenharOpenGLBBox(gl);
+		bbEstacionamento3.desenharOpenGLBBox(gl);
 
+		gl.glDisable(GL.GL_LIGHTING);
+		
+		if (isDesenharBatido) {
+			desenharCuboBatido();
+		} 
+		if (isDesenharOk) {
+			desenharOk();
+		}
+		
 		gl.glFlush();
 	}
 
+	private void desenharCuboBatido() {
+		gl.glColor3f(1.0f, 0.0f, 0.0f);
+		gl.glPushMatrix();
+			gl.glTranslatef(0, 2, 0);
+			glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+		gl.glPushMatrix();
+		gl.glTranslatef(0.3f,1.7f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+
+		gl.glPushMatrix();
+		gl.glTranslatef(0.6f,1.4f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+
+		gl.glPushMatrix();
+		gl.glTranslatef(0.9f,1.1f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+
+		gl.glPushMatrix();
+		gl.glTranslatef(1.2f,0.8f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+		//
+		gl.glPushMatrix();
+		gl.glTranslatef(0.0f,0.8f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+
+		gl.glPushMatrix();
+		gl.glTranslatef(0.3f, 1.1f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+
+		gl.glPushMatrix();
+		gl.glTranslatef(0.6f, 1.4f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+
+		gl.glPushMatrix();
+		gl.glTranslatef(0.9f, 1.7f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+
+		gl.glPushMatrix();
+		gl.glTranslatef(1.2f, 2.0f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+	}
+
+	private void desenharOk() {
+		gl.glColor3f(0.0f, 1.0f, 0.0f);
+		
+		gl.glPushMatrix();
+		gl.glTranslatef(0.4f,1.4f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+		gl.glPushMatrix();
+		gl.glTranslatef(0.6f,1.1f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+		gl.glPushMatrix();
+		gl.glTranslatef(0.8f,0.8f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+
+		gl.glPushMatrix();
+		gl.glTranslatef(1.0f,0.5f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+		//
+		gl.glPushMatrix();
+		gl.glTranslatef(1.0f,0.8f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+		gl.glPushMatrix();
+		gl.glTranslatef(1.1f, 1.0f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+		gl.glPushMatrix();
+		gl.glTranslatef(1.2f, 1.2f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+		gl.glPushMatrix();
+		gl.glTranslatef(1.3f, 1.4f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+		gl.glPushMatrix();
+		gl.glTranslatef(1.4f, 1.6f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+
+		gl.glPushMatrix();
+		gl.glTranslatef(1.5f, 1.8f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+		gl.glPushMatrix();
+		gl.glTranslatef(1.6f, 2.0f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+		gl.glPushMatrix();
+		gl.glTranslatef(1.8f, 2.2f, 0);
+		glut.glutSolidCube(0.3f);
+		gl.glPopMatrix();
+		
+	}
 
 	public void keyPressed(KeyEvent e) {
 
@@ -154,17 +279,11 @@ public class Main implements GLEventListener, KeyListener {
 		case KeyEvent.VK_ESCAPE:
 			System.exit(0);
 			break;
-		case KeyEvent.VK_D:
-			// objetos[0].debug();
+		case KeyEvent.VK_1:
+			cameraAtiva = carroModel.getCamera();
 			break;
-		case KeyEvent.VK_R:
-			// objetos[0].atribuirIdentidade();
-			break;
-		case KeyEvent.VK_SPACE:
-			// TODO: ERRO ao reinicar a thread
-			// manual = !manual;
-			// if (manual) animacao.stop();
-			// else animacao.start();
+		case KeyEvent.VK_2:
+			cameraAtiva = cameraTerceiraPessoa;
 			break;
 		case KeyEvent.VK_RIGHT:
 			carroModel.virarDireita();
@@ -188,11 +307,56 @@ public class Main implements GLEventListener, KeyListener {
 	}
 
 	private void verificarColisao() {
-		carrosEstacionados.forEach(carro -> {
-			if (carroModel.bateuNoCarro(carro)) {
-				System.out.println("bateu");
-			}
-		});
+		if (isDesenhandoColisao) {
+			return;
+		}
+		
+		boolean isEstacionamento1 = bbEstacionamento1.isBoundingBoxDentro(carroModel.getBbCarro());
+		boolean isEstacionamento2 = bbEstacionamento2.isBoundingBoxDentro(carroModel.getBbCarro());
+		boolean isEstacionamento3 = bbEstacionamento3.isBoundingBoxDentro(carroModel.getBbCarro());
+		boolean isBateuCarro = false;
+		for (Carro carro : carrosEstacionados) {
+			isBateuCarro |= carroModel.bateuNoCarro(carro);
+		}
+		
+		if (isBateuCarro) {
+			isDesenhandoColisao = true;
+			new Thread(() -> {
+				isDesenharBatido = true;
+				for (int i = 0; i < 8; i++) {
+					try {
+						isDesenharBatido = !isDesenharBatido;
+						glDrawable.display();
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				isDesenharBatido = false;
+				glDrawable.display();
+				isDesenhandoColisao = false;
+			}).start(); 
+			
+		} else if (isEstacionamento1 || isEstacionamento2 || isEstacionamento3) {
+			isDesenhandoColisao = true;
+			new Thread(() -> {
+				isDesenharOk = true;
+				for (int i = 0; i < 8; i++) {
+					try {
+						isDesenharOk = !isDesenharOk;
+						glDrawable.display();
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				isDesenharOk = false;
+				glDrawable.display();
+				isDesenhandoColisao = false;
+			}).start(); 
+
+		}
+		
 	}
 
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
@@ -249,5 +413,6 @@ public class Main implements GLEventListener, KeyListener {
 		// TODO Auto-generated method stub
 
 	}
+	
 
 }

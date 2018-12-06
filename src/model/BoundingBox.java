@@ -257,4 +257,29 @@ public final class BoundingBox {
 		return true;
 	}
 
+	public boolean isBoundingBoxDentro(BoundingBox b) {
+		if (b.maiorX < menorX)
+			return false;
+		if (b.menorX > maiorX)
+			return false;
+		if (b.maiorZ < menorZ)
+			return false;
+		if (b.menorZ > maiorZ)
+			return false;
+		if (b.maiorY < menorY)
+			return false;
+		if (b.menorY > maiorY)
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "BoundingBox [menorX=" + menorX + ", menorY=" + menorY + ", menorZ=" + menorZ + ", maiorX=" + maiorX
+				+ ", maiorY=" + maiorY + ", maiorZ=" + maiorZ + ", centro=" + centro + ", color=" + color + "]";
+	}
+
+	
+	
+
 }

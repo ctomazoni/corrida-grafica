@@ -302,5 +302,9 @@ public class OBJModel {
     public BoundingBox getBoundingBox() {
 		return boundingBox;
 	}
+
+	public ArrayList<Tuple3> getVerts() {
+		return this.verts;
+	}
     
 }

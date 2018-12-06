@@ -34,7 +34,7 @@ public final class Transformacao4D {
 	public Transformacao4D() {
 	}
 	
-	public double[] obterDados() {
+	public double[] GetDados() {
 		return matriz;	
 	}
 

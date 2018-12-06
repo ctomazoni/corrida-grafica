@@ -13,12 +13,13 @@ public class Volante {
 	public Volante(GL gl) {
 		model = new OBJModel("data/volante2", 1.5f, gl, true);
 		
-		translacaoXYZ(3, 2, 2);
+		translacaoXYZ(12, 12, 19);
+		rotacaoY(30);
 	}
 
 	public void draw(GL gl) {
 		gl.glPushMatrix();
-		gl.glMultMatrixd(matrizObjeto.obterDados(), 0);
+		gl.glMultMatrixd(matrizObjeto.GetDados(), 0);
 		model.draw(gl);
 		gl.glPopMatrix();
 	}
