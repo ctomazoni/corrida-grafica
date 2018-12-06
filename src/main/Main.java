@@ -54,7 +54,7 @@ public class Main implements GLEventListener, KeyListener {
 		glut = new GLUT();
 		glDrawable.setGL(new DebugGL(gl));
 		
-		gl.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		gl.glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 		
 //		gl.glEnable(GL.GL_COLOR_MATERIAL);
 		
@@ -125,7 +125,8 @@ public class Main implements GLEventListener, KeyListener {
 		gl.glLoadIdentity();
 		cameraAtiva.lookAt();
 
-		desenhaSRU3D();
+//		desenhaSRU3D();
+
 		float[] white = { 1.0f, 1.0f, 1.0f, 1.0f };
 		gl.glMaterialfv(GL.GL_FRONT, GL.GL_AMBIENT_AND_DIFFUSE, white, 0);
 		gl.glEnable(GL.GL_LIGHTING);
@@ -136,9 +137,9 @@ public class Main implements GLEventListener, KeyListener {
 		
 		carrosEstacionados.forEach(f -> f.draw(gl));
 		
-		bbEstacionamento1.desenharOpenGLBBox(gl);
-		bbEstacionamento2.desenharOpenGLBBox(gl);
-		bbEstacionamento3.desenharOpenGLBBox(gl);
+//		bbEstacionamento1.desenharOpenGLBBox(gl);
+//		bbEstacionamento2.desenharOpenGLBBox(gl);
+//		bbEstacionamento3.desenharOpenGLBBox(gl);
 
 		gl.glDisable(GL.GL_LIGHTING);
 		
